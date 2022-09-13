@@ -1,4 +1,5 @@
 .venv/
+.python-version
 !/airflow_home/data/.gitignore
 /airflow_home/data/*
 !/airflow_home/logs/.gitignore
