@@ -1,6 +1,6 @@
 ---
-# airflowVersion: "2.3.4"
-# defaultAirflowTag: "2.3.4"
+airflowVersion: "2.3.4"
+defaultAirflowTag: "2.3.4"
 # Airflow executor
 # executor: "CeleryExecutor"
 
