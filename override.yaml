@@ -1,0 +1,60 @@
+---
+# airflowVersion: "2.3.4"
+# defaultAirflowTag: "2.3.4"
+# Airflow executor
+# executor: "CeleryExecutor"
+
+# secret:
+#   - envName: "AIRFLOW_CONN_GCP"
+#     secretName: "my-airflow-connections"
+#     secretKey: "AIRFLOW_CONN_GCP"
+#   - envName: "my-env"
+#     secretName: "my-secret-name"
+#     secretKey: "my-secret-key"
+
+# extraSecrets:
+#   my-airflow-connections:
+#     data: |
+#       AIRFLOW_CONN_GCP: 'base64_encoded_gcp_conn_string'
+#   my-secret-name:
+#     stringData: |
+#       my-secret-key: my-secret
+
+# env:
+#   - name: "AIRFLOW_VAR_KEY"
+#     value: "value_1"
+#   - name: "AIRFLOW_VAR_ANOTHER_KEY"
+#     value: "value_2"
+
+extraEnv: |
+  # - name: AIRFLOW_VAR_HELM_RELEASE_NAME
+  #   value: '{{ .Release.Name }}'
+  - name: AIRFLOW__CORE__LOAD_EXAMPLES
+    value: "False"
+
+# extraEnvFrom: |
+#   - configMapRef:
+#       name: '{{ .Release.Name }}-airflow-variables'
+
+# extraConfigMaps:
+#   '{{ .Release.Name }}-airflow-variables':
+#     data: |
+#       AIRFLOW_VAR_HELLO_MESSAGE: "Hi!"
+
+# Mounting DAGs from an externally populated PVC
+dags:
+  persistence:
+    enabled: true
+    size: 1Gi
+    accessMode: ReadWriteOnce
+    existingClaim: airflow-dag
+    storageClassName: airflow-storageclass
+  gitSync:
+    enabled: false
+
+# logs:
+#   persistence:
+#     enabled: true
+#     size: 1Gi
+#     storageClassName: airflow-storageclass
+#     existingClaim: airflow-log

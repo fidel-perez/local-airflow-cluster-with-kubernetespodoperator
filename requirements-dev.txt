@@ -1,0 +1,5 @@
+apache-airflow==2.3.3
+apache-airflow-providers-cncf-kubernetes
+pre-commit
+pylint
+pylint-airflow

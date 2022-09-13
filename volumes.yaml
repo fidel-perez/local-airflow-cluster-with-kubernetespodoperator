@@ -1,0 +1,58 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: airflow-dag
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: /opt/airflow/dags/
+  storageClassName: airflow-storageclass
+  claimRef:
+    name: airflow-dag
+    namespace: airflow
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: airflow-dag
+  namespace: airflow
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: airflow-storageclass
+# ---
+# kind: PersistentVolume
+# apiVersion: v1
+# metadata:
+#   name: airflow-log
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   capacity:
+#     storage: 2Gi
+#   hostPath:
+#     path: /opt/airflow/logs/
+#   storageClassName: airflow-storageclass
+#   claimRef:
+#     name: airflow-log
+#     namespace: airflow
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: airflow-log
+#   namespace: airflow
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 2Gi
+#   storageClassName: airflow-storageclass
