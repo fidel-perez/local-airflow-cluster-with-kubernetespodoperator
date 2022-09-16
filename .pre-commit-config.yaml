@@ -31,11 +31,6 @@ repos:
     rev: 22.8.0
     hooks:
       - id: black
-  - repo: https://github.com/markdownlint/markdownlint
-    rev: v0.11.0
-    hooks:
-      - id: markdownlint
-        args: [-s, .markdownlint.rb]
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.28.0
     hooks:
