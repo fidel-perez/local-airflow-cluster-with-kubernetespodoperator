@@ -19,7 +19,7 @@ This repository shows how to deploy Airflow on Kubernetes(minikube) using Helm a
 ### Starting a local Kubernetes cluster using minikube
 
 ```bash
-$ minikube start --vm-driver=docker --cpus 8 --memory 16g --kubernetes-version v1.21.14
+$ minikube delete;minikube start --vm-driver=docker --cpus 8 --memory 16g --kubernetes-version v1.21.14
 
 😄  minikube v1.26.1 on Ubuntu 22.04
 ✨  Using the docker driver based on user configuration
@@ -186,4 +186,27 @@ Method2: delete the Kubernetes cluster.
 
 ```bash
 minikube delete
+```
+
+
+
+
+## Ramping up everything in one command
+
+```bash
+minikube delete;minikube start --vm-driver=docker --cpus 8 --memory 16g --kubernetes-version v1.21.14
+helm repo add apache-airflow https://airflow.apache.org
+helm repo update
+minikube kubectl -- create namespace airflow
+[console]::beep(500,300)
+minikube mount ${PWD}/airflow_home:/opt/airflow/mounted-from-host
+```
+
+In another shell:
+
+```bash
+minikube kubectl -- apply -f volumes.yaml
+helm install airflow apache-airflow/airflow --namespace airflow -f override.yaml --version 1.6.0 --debug
+[console]::beep(500,300)
+minikube kubectl -- port-forward svc/airflow-webserver 58080:8080 --namespace airflow --address=0.0.0.0
 ```

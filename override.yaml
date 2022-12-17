@@ -1,7 +1,27 @@
 ---
 airflowVersion: "2.3.4"
 defaultAirflowTag: "2.3.4"
-# executor: "CeleryExecutor"
+executor: "KubernetesExecutor"
+
+airflow:
+  extraVolumes: # this will create the volume from the directory
+  - name: airflow-local
+    hostPath:
+      path: /opt/airflow/mounted-from-host/airflow-local/
+  extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
+  - name: airflow-local
+    mountPath: /opt/airflow/airflow-local  # location in the container it will put the directory mentioned below.
+
+scheduler:
+  extraVolumes: # this will create the volume from the directory
+  - name: airflow-local
+    hostPath:
+      path: /opt/airflow/mounted-from-host/airflow-local/
+  extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
+  - name: airflow-local
+    mountPath: /opt/airflow/airflow-local  # location in the container it will put the directory mentioned below.
+
+
 
 extraEnv: |
   - name: AIRFLOW__CORE__LOAD_EXAMPLES
@@ -33,21 +53,22 @@ dags:
 #     stringData: |
 #       my-secret-key: my-secret
 
-# env:
-#   - name: "AIRFLOW_VAR_KEY"
-#     value: "value_1"
-#   - name: "AIRFLOW_VAR_ANOTHER_KEY"
-#     value: "value_2"
 
 
 # extraEnvFrom: |
 #   - configMapRef:
 #       name: '{{ .Release.Name }}-airflow-variables'
 
-# extraConfigMaps:
-#   '{{ .Release.Name }}-airflow-variables':
-#     data: |
-#       AIRFLOW_VAR_HELLO_MESSAGE: "Hi!"
+env:
+  - name: "AIRFLOW_VAR_KEY"
+    value: "value_1"
+  - name: "AIRFLOW_VAR_ANOTHER_KEY"
+    value: "value_2"
+
+extraConfigMaps: # This configures Airflow Variables (WebUI -> Airflow variables)
+  '{{ .Release.Name }}-airflow-variables':
+    data: |
+      AIRFLOW_VAR_HELLO_MESSAGE: "Hi!"
 
 # logs:
 #   persistence:

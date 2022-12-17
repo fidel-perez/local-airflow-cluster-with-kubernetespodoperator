@@ -4,3 +4,7 @@
 /airflow_home/data/*
 !/airflow_home/logs/.gitignore
 /airflow_home/logs/*
+.github
+.git
+.vscode
+__pycache__
