@@ -1,5 +1,36 @@
 # Running Airflow on minikube
 
+## Ramping up everything in one command
+
+```bash
+start_cluster.sh
+```
+
+
+## Examples in this repository:
+* Load a specific docker image into the cluster.
+    * Use a custom built Airflow image
+    * Have specific python dependencies installed in our custom Airflow image
+* Ability to run Airflow DAGs using KubernetesPodOperator 
+* Load a local folder into the cluster pods (with plugins, dags, etc)
+* Load Airflow variables from a project file:
+    * Env variables defined in "override.yaml" are loaded into the pods, for example, `AIRFLOW__CORE__DAGS_FOLDER` is set to `/opt/airflow/airflow-home/dags`
+    * Using the persistent airflow-home folder, one can define there the config files for the airflow server (WebUI -> Variables)
+* [TODO]: Airflow UI service instead of port forwarding
+
+## Adapting the repository to match your production cluster
+
+You will need to configure the following in case you have it defined in your production DAGs:
+* Node selectors
+* Tolerations
+* Existing pool names to match your production cluster (`pool:`)
+
+
+
+
+
+# Original repo readme (It is outdated after the changes made):
+
 ## Introduction
 
 Apache Airflow is an open-source workflow management platform that can be used to schedule and monitor workflows in Python.
@@ -189,24 +220,3 @@ minikube delete
 ```
 
 
-
-
-## Ramping up everything in one command
-
-```bash
-minikube delete;minikube start --vm-driver=docker --cpus 8 --memory 16g --kubernetes-version v1.21.14
-helm repo add apache-airflow https://airflow.apache.org
-helm repo update
-minikube kubectl -- create namespace airflow
-[console]::beep(500,300)
-minikube mount ${PWD}/airflow_home:/opt/airflow/mounted-from-host
-```
-
-In another shell:
-
-```bash
-minikube kubectl -- apply -f volumes.yaml
-helm install airflow apache-airflow/airflow --namespace airflow -f override.yaml --version 1.6.0 --debug
-[console]::beep(500,300)
-minikube kubectl -- port-forward svc/airflow-webserver 58080:8080 --namespace airflow --address=0.0.0.0
-```

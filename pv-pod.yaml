@@ -14,7 +14,7 @@ spec:
       image: busybox
       command: ["/bin/sh", "-ec", "sleep 1000"]
       volumeMounts:
-        - mountPath: "/opt/airflow/mounted-from-host/dags"
-          name: airflow-dag
-        - mountPath: "/opt/airflow/mounted-from-host/airflow-local"
-          name: airflow-local
+        # - mountPath: "/opt/airflow/mounted-from-host/dags"
+        #   name: airflow-dag
+        - mountPath: "/opt/airflow/mounted-from-host"
+          name: airflow-home

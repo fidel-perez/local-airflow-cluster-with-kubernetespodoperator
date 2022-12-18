@@ -3,39 +3,54 @@ airflowVersion: "2.3.4"
 defaultAirflowTag: "2.3.4"
 executor: "KubernetesExecutor"
 
-airflow:
-  extraVolumes: # this will create the volume from the directory
-  - name: airflow-local
-    hostPath:
-      path: /opt/airflow/mounted-from-host/airflow-local/
-  extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
-  - name: airflow-local
-    mountPath: /opt/airflow/airflow-local  # location in the container it will put the directory mentioned below.
+images:
+  airflow:
+    repository: custom-airflow-image
+    tag: latest
+    pullPolicy: Never
 
 scheduler:
   extraVolumes: # this will create the volume from the directory
-  - name: airflow-local
+  - name: airflow-home
     hostPath:
-      path: /opt/airflow/mounted-from-host/airflow-local/
+      path: /opt/airflow/mounted-from-host/
   extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
-  - name: airflow-local
-    mountPath: /opt/airflow/airflow-local  # location in the container it will put the directory mentioned below.
+  - name: airflow-home
+    mountPath: /opt/airflow/airflow-home  # location in the container it will put the directory mentioned below.
 
+
+webserver:
+  extraVolumes: # this will create the volume from the directory
+  - name: airflow-home
+    hostPath:
+      path: /opt/airflow/mounted-from-host/
+  extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
+  - name: airflow-home
+    mountPath: /opt/airflow/airflow-home  # location in the container it will put the directory mentioned below.
+
+worker:
+  extraVolumes: # this will create the volume from the directory
+  - name: airflow-home
+    hostPath:
+      path: /opt/airflow/mounted-from-host/
+  extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
+  - name: airflow-home
+    mountPath: /opt/airflow/airflow-home  # location in the container it will put the directory mentioned below.
 
 
 extraEnv: |
   - name: AIRFLOW__CORE__LOAD_EXAMPLES
     value: "False"
 
-dags:
-  persistence:
-    enabled: true
-    size: 1Gi
-    accessMode: ReadWriteOnce
-    existingClaim: airflow-dag
-    storageClassName: airflow-storageclass
-  gitSync:
-    enabled: false
+# dags:
+#   persistence:
+#     enabled: true
+#     size: 1Gi
+#     accessMode: ReadWriteOnce
+#     existingClaim: airflow-dag
+#     storageClassName: airflow-storageclass
+#   gitSync:
+#     enabled: false
 
 # secret:
 #   - envName: "AIRFLOW_CONN_GCP"
@@ -64,6 +79,8 @@ env:
     value: "value_1"
   - name: "AIRFLOW_VAR_ANOTHER_KEY"
     value: "value_2"
+  - name: "AIRFLOW__CORE__DAGS_FOLDER"
+    value: "/opt/airflow/airflow-home/dags"
 
 extraConfigMaps: # This configures Airflow Variables (WebUI -> Airflow variables)
   '{{ .Release.Name }}-airflow-variables':
