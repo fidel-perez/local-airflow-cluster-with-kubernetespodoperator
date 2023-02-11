@@ -17,6 +17,7 @@ scheduler:
   extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
   - name: airflow-home
     mountPath: /opt/airflow/airflow-home  # location in the container it will put the directory mentioned below.
+    readOnly: false
 
 
 webserver:
@@ -27,8 +28,9 @@ webserver:
   extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
   - name: airflow-home
     mountPath: /opt/airflow/airflow-home  # location in the container it will put the directory mentioned below.
+    readOnly: false
 
-worker:
+workers:
   extraVolumes: # this will create the volume from the directory
   - name: airflow-home
     hostPath:
@@ -36,6 +38,7 @@ worker:
   extraVolumeMounts: # this will get the volume and mount it to that path in the container                                                                                                                                                               
   - name: airflow-home
     mountPath: /opt/airflow/airflow-home  # location in the container it will put the directory mentioned below.
+    readOnly: false
 
 
 extraEnv: |

@@ -1,4 +1,6 @@
-./clean_up.sh
+minikube delete
+# Remove any active port forwarding / volume sharing
+pkill -f 'minikube'
 
 minikube start --vm-driver=docker --cpus 8 --memory 16g --kubernetes-version v1.21.14
 helm repo add apache-airflow https://airflow.apache.org
